@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── RESET ───────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+/* ── TOKENS ──────────────────────────────────────────── */
+:root {
+  --bg:           #111110;
+  --surface:      #1c1c1a;
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.22);
+  --text:         #f0ede8;
+  --text-muted:   rgba(240, 237, 232, 0.42);
+  --accent:       #f7b41a;
+  --accent-dim:   rgba(247, 180, 26, 0.12);
+  --navbar-h:     72px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --radius:       10px;
+  --ease:         cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── BASE ────────────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}

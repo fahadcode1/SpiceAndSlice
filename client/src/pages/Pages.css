@@ -1,0 +1,333 @@
+.cart-container {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 3rem;
+}
+
+.cart-card {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(5px);
+  animation: cardDrop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cart-card-image {
+  height: 180px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.cart-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.cart-card-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.cart-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.cart-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.75rem 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.remove-btn {
+  background: rgba(244, 67, 54, 0.1);
+  color: #ef9a9a;
+  border: 1px solid rgba(244, 67, 54, 0.25);
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.75rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.remove-btn:hover {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: rgba(244, 67, 54, 0.45);
+}
+
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clear-btn {
+  max-width: 300px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cart-empty span {
+  font-size: 4rem;
+}
+
+.cart-empty h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.cart-empty p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+
+/* ── SHARED UTILITY PAGE STYLES ──────────────────────── */
+
+.page-container {
+  width: 100%;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 2rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.page-inner {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* ── HEADER ──────────────────────────────────────────── */
+.page-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #F7B41A;
+  margin-bottom: 0.8rem;
+}
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: #f5f0e8;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+
+.page-subtitle {
+  font-size: 0.92rem;
+  color: #7a6a58;
+  margin-bottom: 3rem;
+}
+
+/* ── DIVIDER ─────────────────────────────────────────── */
+.page-divider {
+  width: 48px;
+  height: 2px;
+  background: #F7B41A;
+  margin-bottom: 3rem;
+  border: none;
+}
+
+/* ── SECTION BLOCK ───────────────────────────────────── */
+.page-section {
+  margin-bottom: 2.5rem;
+}
+
+.page-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #F7B41A;
+  margin-bottom: 0.6rem;
+}
+
+.page-section p,
+.page-section li {
+  font-size: 0.92rem;
+  color: #a89880;
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+}
+
+.page-section ul {
+  padding-left: 1.2rem;
+}
+
+.page-section li {
+  list-style: disc;
+}
+
+/* ── CONTACT FORM ────────────────────────────────────── */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #f5f0e8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group textarea {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(247, 180, 26, 0.18);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.92rem;
+  color: #f5f0e8;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #F7B41A;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #5a4e42;
+}
+
+.form-submit {
+  margin-top: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: #F7B41A;
+  color: #111110;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: opacity 0.2s;
+}
+
+.form-submit:hover {
+  opacity: 0.88;
+}
+
+/* ── MISSION CARDS ───────────────────────────────────── */
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.mission-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(247, 180, 26, 0.1);
+  border-radius: 10px;
+  padding: 1.2rem;
+}
+
+.mission-card:hover {
+  border-color: rgba(247, 180, 26, 0.3);
+  transition: border-color 0.2s;
+}
+
+.mission-card-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.mission-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f5f0e8;
+  margin-bottom: 0.4rem;
+}
+
+.mission-card p {
+  font-size: 0.84rem;
+  color: #7a6a58;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .page-container {
+    padding: 3.5rem 1.2rem;
+  }
+  .mission-grid {
+    grid-template-columns: 1fr;
+  }
+}

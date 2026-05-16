@@ -1,0 +1,143 @@
+/* ── SECTION SHELL — identical structure to hero-section ── */
+.whyus-section {
+  width: 100%;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 5rem;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── LEFT: TEXT CONTENT ──────────────────────────────── */
+.whyus-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  text-align: left;
+}
+
+/* ── RIGHT: IMAGE SLOT ───────────────────────────────── */
+.whyus-image {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 90%;
+  height: 100%;
+  z-index: 0;
+  background-color: #1a1a18; /* placeholder until image is dropped in */
+}
+
+.whyus-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.35;
+}
+
+/* same left-fade gradient as Hero */
+.whyus-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #111110 10%, transparent 60%);
+  z-index: 1;
+}
+.whyus-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #111110 0%, transparent 20%);
+  z-index: 1;
+}
+
+/* ── EYEBROW ─────────────────────────────────────────── */
+.whyus-eyebrow {
+  margin-bottom: 1rem;
+}
+
+/* ── TITLE ───────────────────────────────────────────── */
+.whyus-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  color: #f5f0e8;
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+
+/* ── DESCRIPTION ─────────────────────────────────────── */
+.whyus-description {
+  font-size: 1.05rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.whyus-description .description-light {
+  color: #a89880;
+}
+
+.whyus-description .description-bold {
+  color: #f5f0e8;
+  font-weight: 600;
+}
+
+/* ── REASON CARDS ────────────────────────────────────── */
+.whyus-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.reason-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(247, 180, 26, 0.12);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  animation: cardDrop 0.4s ease both;
+}
+
+.reason-card:hover {
+  border-color: rgba(247, 180, 26, 0.35);
+  background: rgba(247, 180, 26, 0.05);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.reason-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.reason-text h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F7B41A;
+  margin: 0 0 0.3rem;
+}
+
+.reason-text p {
+  font-size: 0.88rem;
+  color: #a89880;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── ANIMATION ───────────────────────────────────────── */
+@keyframes cardDrop {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
