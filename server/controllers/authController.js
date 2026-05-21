@@ -1,123 +1,140 @@
 import express from "express"
-import { User } from "../models/user.model.js"
+import { userModel } from "../models/user.model.js"
 import bcrypt from "bcryptjs"
+import crypto from "node:crypto";
+import jwt from "jsonwebtoken"
 import sessionModel from "../models/session.model.js"
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js"
 import mongoose from "mongoose"
 
-export const signup = async (req, res) => {
-    const { username, password, email } = req.body
+
+
+export const register = async (req, res) => {
+
 
     try {
-        if (!username || !password || !email) {
-            return res.status(400).json({ success: false, message: "All fields must be filled" })
-        }
+    const { username, email, password } = req.body;
 
-        const userAlreadyExist = await User.findOne({ email });
-        if (userAlreadyExist) {
-            return res.status(400).json({ success: false, message: "User already exists" })
-        }
+    const isAlreadyRegistered = await userModel.findOne({
+        $or: [
+            { username },
+            { email }
+        ]
+    })
 
-        const hashedPassword = await bcrypt.hash(password, 10)
-        const verificationToken =  Math.floor(1000 + Math.random() * 9000).toString()
-    
-
-        const user = new User({
-            username,
-            email,
-            password: hashedPassword,
-            verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
+    if (isAlreadyRegistered) {
+       return res.status(409).json({
+            message: "Username or email already exists"
         })
-
-        await user.save();
-
-        generateTokenAndSetCookie(res, user._id)
-
-        res.status(201).json({
-            success: true,
-            message: "User created successfully",
-            user: {
-                ...user._doc,
-                password: undefined,
-            }
-        })
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message })
     }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await userModel.create({
+        username,
+        email,
+        password: hashedPassword
+    })
+
+    // const otp = generateOtp();
+    // const html = getOtpHtml(otp);
+
+    // const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
+    // await otpModel.create({
+    //     email,
+    //     user: user._id,
+    //     otpHash
+    // })
+
+    // await sendEmail(email, "OTP Verification", `Your OTP code is ${otp}`, html)
+
+    res.status(201).json({
+        message: "User registered successfully",
+        user: {
+            username: user.username,
+            email: user.email,
+            verified: user.verified
+        },
+    })
+}  catch (err) {
+  if (err.code === 11000) {
+    return res.status(409).json({ message: "Email already registered" });
+  }
+  res.status(500).json({ message: "Server error" });
 }
+
+
+}
+
 
 export const login = async (req, res) => {
     try {
-        const {email, password} = req.body
-        
-        const user = await User.findOne({email})
-        if(!email){
-            res.status(400).json({
-                success: false,
-                message: "Email is not registered"
-            })
+        const { email, password } = req.body;
 
-        if (!user.verified) {
-            res.status(400).json({
-                success: false,
-                message: "Email is not verfied"
-            })
-        }    
-        const validPassword = await bcrypt.compare(password, user.password)
-        if (!validPassword) {
-            res.status(400).json({
-                success : false,
-                message: "Bad credentials"
-            })}
-         
-
-        // Refresh Token    
-        const refreshToken = jwt.sign(
-            {id : user._id},
-            config.JWT_SECRET,
-            {expiresIn: "7d"}
-
-        )
-                  
-        const refreshTokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
-
-        const session = await sessionModel.create({
-            user : user._id,
-            refreshTokenHash,
-            ip : req.ip,
-            userAgent : req.header["user-agent"]
-        })
-        
-        const accessToken = jwt.sign({
-            id: user._id,
-            sessionId: session._id
-        }, config.JWT_SECRET,
-            {
-                expiresIn: "15m"
-            }
-        )
-
-        res.cookie("refreshToken", refreshToken,{
-            httpOnly : true,
-            secure: true,
-            sameSite : "secure",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.status(200).json({
-            message : "Logged in Successfully",
-            user : {
-                username : user.username,
-                emial   : user.email
-            },
-            accessToken,
-        })
-
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required" });
         }
 
-    } catch(error){
+        const user = await userModel.findOne({ email });
 
+        if (!user) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        // comment this out while testing since OTP flow is disabled
+        // if (!user.verified) {
+        //     return res.status(401).json({ message: "Email not verified" });
+        // }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        const refreshToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        const refreshTokenHash = crypto
+            .createHash("sha256")
+            .update(refreshToken)
+            .digest("hex");
+
+        const session = await sessionModel.create({
+            user: user._id,
+            refreshTokenHash,
+            ip: req.ip,
+            userAgent: req.headers["user-agent"],
+        });
+
+        const accessToken = jwt.sign(
+            { id: user._id, sessionId: session._id },
+             process.env.JWT_ACCESS_SECRET,
+            { expiresIn: "15m" }
+        );
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.status(200).json({
+            message: "Logged in successfully",
+            user: {
+                username: user.username,
+                email: user.email,
+            },
+            accessToken,
+        });
+
+    } catch (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ message: "Server error" });
     }
-}
+};
+export const logout = async (req, res) =>   {
 
+}

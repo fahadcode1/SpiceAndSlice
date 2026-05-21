@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     },
     verified: {
         type: Boolean,
-        default: false
+        default: true
     },
 
     password : {
@@ -53,6 +53,6 @@ const userSchema = new mongoose.Schema({
 )
 
 
-const User = mongoose.model("user", userSchema);
+const userModel = mongoose.model("user", userSchema);
 
-export { User };
+export { userModel };
