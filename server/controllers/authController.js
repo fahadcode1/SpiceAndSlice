@@ -1,10 +1,11 @@
 import express from "express"
 import { userModel } from "../models/user.model.js"
 import bcrypt from "bcryptjs"
-import crypto from "node:crypto";
+import crypto, { verify } from "node:crypto";
 import jwt from "jsonwebtoken"
 import sessionModel from "../models/session.model.js"
 import mongoose from "mongoose"
+import { config } from "node:process";
 
 
 
@@ -63,7 +64,6 @@ export const register = async (req, res) => {
 
 
 }
-
 
 export const login = async (req, res) => {
     try {
@@ -136,7 +136,6 @@ export const login = async (req, res) => {
     }
 };
 
-
 export async function logout(req, res) {
 
     const refreshToken = req.cookies.refreshToken;
@@ -171,3 +170,85 @@ export async function logout(req, res) {
 
 }
 
+export async function refreshToken(req, res) {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(401).json({
+            message: "Refresh token not found"
+        })
+    }
+
+    const decoded = jwt.verify(refreshToken, config.JWT_SECRET)
+
+    const refreshTokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    const session = await sessionModel.findOne({
+        refreshTokenHash,
+        revoked: false
+    })
+
+    if (!session) {
+        return res.status(401).json({
+            message: "Invalid refresh token"
+        })
+    }
+
+
+    const accessToken = jwt.sign({
+        id: decoded.id
+    }, config.JWT_SECRET,
+        {
+            expiresIn: "15m"
+        }
+    )
+
+    const newRefreshToken = jwt.sign({
+        id: decoded.id
+    }, config.JWT_SECRET,
+        {
+            expiresIn: "7d"
+        }
+    )
+
+    const newRefreshTokenHash = crypto.createHash("sha256").update(newRefreshToken).digest("hex");
+
+    session.refreshTokenHash = newRefreshTokenHash;
+    await session.save();
+
+    res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    })
+
+    res.status(200).json({
+        message: "Access token refreshed successfully",
+        accessToken
+    })
+}
+
+export async function getMe(req, res) {
+
+    const token = req.headers.authorization?.split(" ")[ 1 ];
+
+    if (!token) {
+        return res.status(401).json({
+            message: "token not found"
+        })
+    }
+
+    const decoded = jwt.verify(token, config.JWT_SECRET)
+
+    const user = await userModel.findById(decoded.id)
+
+    res.status(200).json({
+        message: "user fetched successfully",
+        user: {
+            username: user.username,
+            email: user.email,
+        }
+    })
+
+}
