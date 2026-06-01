@@ -5,12 +5,12 @@ import crypto, { verify } from "node:crypto";
 import jwt from "jsonwebtoken"
 import sessionModel from "../models/session.model.js"
 import mongoose from "mongoose"
+import { sendVerificationOtp } from "../utils/sendVerificationOtp.js";
 import { config } from "node:process";
 
 
 
 export const register = async (req, res) => {
-
 
     try {
     const { username, email, password } = req.body;
@@ -23,6 +23,17 @@ export const register = async (req, res) => {
     })
 
     if (isAlreadyRegistered) {
+        if (!isAlreadyRegistered.verified){
+          await  sendVerificationOtp(isAlreadyRegistered)
+          return res.status(403).json({
+                    success : false,
+                    message : "Account not verified. OTP sent to your email.",
+                    email: user.email,
+                    redirectTo: '/verify-account'
+
+                })
+
+        }
        return res.status(409).json({
             message: "Username or email already exists"
         })
@@ -34,27 +45,17 @@ export const register = async (req, res) => {
         email,
         password: hashedPassword
     })
+    
+    await sendVerificationOtp(user)  // fix 3: generate + save otp + send email
 
-    // const otp = generateOtp();
-    // const html = getOtpHtml(otp);
-
-    // const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
-    // await otpModel.create({
-    //     email,
-    //     user: user._id,
-    //     otpHash
-    // })
-
-    // await sendEmail(email, "OTP Verification", `Your OTP code is ${otp}`, html)
-
-    res.status(201).json({
-        message: "User registered successfully",
-        user: {
-            username: user.username,
-            email: user.email,
-            verified: user.verified
-        },
+    return res.status(201).json({
+      success: true,
+      message: 'Registered successfully. OTP sent to your email.',
+      email: user.email,
+      redirectTo: '/verify-account'
     })
+
+
 }  catch (err) {
   if (err.code === 11000) {
     return res.status(409).json({ message: "Email already registered" });
