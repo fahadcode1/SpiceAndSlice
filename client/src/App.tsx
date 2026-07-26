@@ -1,11 +1,28 @@
-import AppRoutes from "./routes/AppRoutes"
-import { BrowserRouter } from "react-router-dom"
+// import AppRoutes from "./routes/AppRoutes"
+import AppRoutes from "./routes/PublicRoute"
+import { AuthProvider } from "./context/AuthContext"
+import { useAuthStore } from "./store/authStore"
+import { useEffect, useRef } from "react"
 import './App.css'
 
-export default function App() {
+function App() {
+  const initialize = useAuthStore(state => state.initialize)
+  const isAuthReady = useAuthStore(state => state.isAuthReady)
+  const initRef = useRef(false)
+
+  useEffect(() => {
+    if (initRef.current) return
+    initRef.current = true
+    initialize()
+  }, [])
+
+  if (!isAuthReady) return null
+
   return (
-    <BrowserRouter>
+    <AuthProvider>
       <AppRoutes />
-    </BrowserRouter>
-  );
+    </AuthProvider>
+  )
 }
+
+export default App
