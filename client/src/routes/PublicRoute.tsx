@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom"
 import Home from "../components/home/Home"
-import NavBarLayout from "../components/layout/Layout"
 import Menu from "../components/menu/Menu"
 import Cart from "../pages/Cart"
 import About from "../pages/About"
@@ -19,7 +18,7 @@ import { PasswordChangedPage } from "../components/auth/PasswordChangedPage"
 export default function AppRoutes() {
     return(
     <Routes>
-        <Route element={<NavBarLayout />}> 
+        <Route element={<Layout />}> 
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/cart" element={<Cart />} />
@@ -33,8 +32,8 @@ export default function AppRoutes() {
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
             <Route path="/Contact" element={<Contact />} />
        </Route>
-    <Route path="/verify-account" element={<VerifyAccountPage />} />
-    <Route path="/register-success" element={<RegisterSuccessPage />} />
+        <Route path="/verify-account" element={<VerifyAccountPage />} />
+        <Route path="/register-success" element={<RegisterSuccessPage />} />
     </Routes>
 
 )}
@@ -42,6 +41,7 @@ export default function AppRoutes() {
 
 import { Navigate, Outlet } from "react-router-dom"
 import { useAuthStore } from "../store/authStore"
+import Layout from "../components/layout/Layout"
 
 export function PublicRoute() {
   const user = useAuthStore((s) => s.user)

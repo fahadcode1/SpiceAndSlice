@@ -1,5 +1,4 @@
-// import AppRoutes from "./routes/AppRoutes"
-import AppRoutes from "./routes/PublicRoute"
+import { AppRoutes } from "./routes/AppRoutes"
 import { AuthProvider } from "./context/AuthContext"
 import { useAuthStore } from "./store/authStore"
 import { useEffect, useRef } from "react"
