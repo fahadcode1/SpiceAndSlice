@@ -10,7 +10,7 @@ export interface IUser extends Document {
   mobileNumber?: string
   isVerifiedMobileNumber: boolean
   password: string
-  role: "user" | "moderator" | "admin" | "leadAdmin" | "manager"
+  role: "USER" | "ADMIN" | "MANAGER" | "OWNER"
   emailOtp?: string | undefined
   emailOtpExpiry?: Date | undefined
   mobileNumberOtp?: string | undefined
@@ -42,8 +42,8 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["user", "moderator", "admin", "leadAdmin", "manager"],
-      default: "user",
+      enum: ["USER", "ADMIN", "MANAGER", "OWNER",],
+      default: "USER",
     },
     emailOtp: { type: String },
     emailOtpExpiry: { type: Date },
