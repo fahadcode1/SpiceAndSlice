@@ -12,6 +12,11 @@ interface Config {
     jwtRefreshExpiresIn: string
     gmailUser: string
     gmailAppPass: string
+    ownerFirstName : string
+    ownerLastName : string
+    ownerEmail : string
+    ownerPassword : string
+    ownerMobileNumber : string
 }
 
 const config: Config = {
@@ -24,6 +29,12 @@ const config: Config = {
     jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
     gmailUser: process.env.GMAIL_USER || '',
     gmailAppPass: process.env.GMAIL_APP_PASS || '',
+    ownerFirstName : process.env.OWNER_FIRST_NAME || '',
+    ownerLastName : process.env.OWNER_LAST_NAME || '',
+    ownerEmail : process.env.OWNER_EMAIL || '',
+    ownerPassword : process.env.OWNER_PASSWORD || '',
+    ownerMobileNumber : process.env.OWNER_MOBILE_NUMBER || '',
+
 }
 
 // Critical vars ke liye validation — agar missing ho to startup pe hi crash kar do

@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.route'
 import passwordRoutes from './routes/password.routes'
 import userRoutes from './routes/user.routes'
 import dishRouter from "./routes/dish.routes"
+import staffRoutes from "./routes/staff.route"
 
 dns.setServers(["1.1.1.1", "8.8.8.8"])
 const PORT = process.env.PORT ||8000
@@ -26,6 +27,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/auth", passwordRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/admin/dishes", dishRouter)
+app.use("/api/admin/staffs",staffRoutes)
 
 app.get("/test", (req : Request, res : Response)  =>  {
     res.json({ message: "CORS is working!" })

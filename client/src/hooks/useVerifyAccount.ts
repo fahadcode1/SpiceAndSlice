@@ -41,7 +41,7 @@ export const useVerifyAccount = () =>   {
     async function handleSubmit(event : React.FormEvent<HTMLFormElement>){
         event.preventDefault()
 
-        if (!otp || otp.length < 6 ){
+        if (!otp || otp.length < 4 ){
             setError("Enter Valid OTP")
             return
         }

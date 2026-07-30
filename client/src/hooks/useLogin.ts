@@ -64,12 +64,23 @@ export const useLogin = () => {
             saveAccessToken(result.accessToken)
             navigate("/dashboard")
         } catch (error: any) {
-            const message = error?.response?.data?.message
+            const responseData = error?.response?.data
+            const message = responseData?.message
+            const redirectTo = responseData?.redirectTo
+            const unverifiedEmail = responseData?.email
+
             if (error?.response?.status === 0) {
                 setServerError("No internet connection")
-            } else {
-                setServerError(message || "Invalid credentials. Try again.")
+                return
             }
+
+            if (redirectTo) {
+                // Backend ne redirect bataya hai (jaise email not verified) - error dikhane ki jagah wahi page pe le jao
+                navigate(redirectTo, { state: { email: unverifiedEmail } })
+                return
+            }
+
+            setServerError(message || "Invalid credentials. Try again.")
         } finally {
             setIsLoading(false)
         }

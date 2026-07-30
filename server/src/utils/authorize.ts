@@ -1,4 +1,3 @@
-// middlewares/authorize.ts
 import { Request, Response, NextFunction } from "express";
 import { hasPermission, Permission, Role } from "./permissions";
 

@@ -9,9 +9,15 @@ export	type	Permission	=
 		|	"order:create"							
 		|	"order:view_own"
 		|	"user:promote_admin"
+		|	"user:demote_admin"	
 		|	"user:promote_manager"
-		|	"user:demote";
+		|	"user:demote_manager";
         
+const	userPermissions:	Permission[]	=	[
+		"dish:view",
+		"order:create",
+		"order:view_own",
+];
 //	Admin's	permission	set	—	the	"base"	set	for	staff.
 const	adminPermissions:	Permission[]	=	[
 		"dish:create",
@@ -28,7 +34,7 @@ const	adminPermissions:	Permission[]	=	[
 const	managerPermissions:	Permission[]	=	[
 		...adminPermissions,
 		"user:promote_admin",
-		"user:demote",
+		"user:demote_admin",
 ];
 //	Owner = everything Manager	can	do	+ the ability to make Managers.
 //	(Only the Owner	can	create a Manager —	a Manager cannot	create	another	Manager,
@@ -36,12 +42,9 @@ const	managerPermissions:	Permission[]	=	[
 const	ownerPermissions:	Permission[]	=	[
 		...managerPermissions,
 		"user:promote_manager",
+		"user:demote_manager",
 ];
-const	userPermissions:	Permission[]	=	[
-		"dish:view",
-		"order:create",
-		"order:view_own",
-];
+
 export	const rolePermissions:	Record<Role, Permission[]>	=	{
 		OWNER:	ownerPermissions,
 		MANAGER:	managerPermissions,
