@@ -18,4 +18,5 @@ authRoutes.post('/resend-otp', handleResendEmailOtp )
 authRoutes.post('/verify-account', handleVerifyEmail)
 authRoutes.post('/logout', handleLogout)
 
+authRoutes.post('/admin/login', handleLogin)
 export default authRoutes

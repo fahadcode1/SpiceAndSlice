@@ -8,6 +8,7 @@ export	type	Permission	=
 		|	"order:approve"
 		|	"order:create"							
 		|	"order:view_own"
+		|	"user:get_staffs"
 		|	"user:promote_admin"
 		|	"user:demote_admin"	
 		|	"user:promote_manager"
@@ -26,6 +27,7 @@ const	adminPermissions:	Permission[]	=	[
 		"dish:view",
 		"order:view_all",
 		"order:approve",
+		"user:get_staffs"
 ];
 
 //	Manager	=	everything	Admin can do + user management.

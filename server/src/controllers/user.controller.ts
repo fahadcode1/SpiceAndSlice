@@ -33,7 +33,8 @@ export const handleGetMe = async (req : Request, res : Response) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                mobileNumber: user.mobileNumber
+                mobileNumber: user.mobileNumber,
+                role : user.role
             }
         })
 

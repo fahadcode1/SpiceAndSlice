@@ -1,0 +1,179 @@
+.dashboard-sidebar {
+  width: 260px;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+}
+
+.sidebar-title {
+  margin: 0;
+  padding: 24px;
+
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 18px 16px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 16px;
+
+  border-radius: 10px;
+
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.sidebar-link i {
+  font-size: 1.15rem;
+}
+
+.sidebar-link:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.sidebar-link-active {
+  background: #111827;
+  color: #ffffff;
+}
+
+.sidebar-link-active:hover {
+  background: #111827;
+  color: #ffffff;
+}
+
+
+.sidebar-bottom {
+  margin-top: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  padding: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  background: #f9fafb;
+
+  text-decoration: none;
+  color: #111827;
+
+  transition: all 0.2s ease;
+}
+
+.sidebar-profile:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.sidebar-profile i {
+  font-size: 1.8rem;
+  color: #6b7280;
+}
+
+.sidebar-profile span {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Active Profile */
+
+.sidebar-profile.sidebar-link-active {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+}
+
+.sidebar-profile.sidebar-link-active i {
+  color: #ffffff;
+}
+
+
+.sidebar-logout {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #dc2626;
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-logout:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.sidebar-logout:active {
+  transform: scale(0.98);
+}
+
+.dashboard-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-sidebar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 100px;
+}
+
+
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    width: 220px;
+  }
+
+  .sidebar-title {
+    padding: 20px;
+    font-size: 1.2rem;
+  }
+
+  .sidebar-nav {
+    padding: 16px 12px;
+  }
+
+  .sidebar-bottom {
+    padding: 14px;
+  }
+}

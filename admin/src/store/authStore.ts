@@ -1,14 +1,12 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 import { create } from "zustand";
 
-export type Role = "USER" | "ADMIN" | "MANAGER" | "OWNER"
 
 interface User {
   id: string;
   firstName : string
   lastName : string
   email: string;
-  role: Role
 }
 
 interface AuthState {

@@ -1,6 +1,25 @@
 import userModel from "../models/userModel";
 import { Request, Response } from "express";
 
+export const getAllStaff = async (req: Request, res: Response) => {
+    try {
+        const staff = await userModel
+            .find({ role: { $in: ["ADMIN", "MANAGER", "OWNER"] } })
+            .select("firstName lastName email mobileNumber role")
+
+        return res.status(200).json({
+            success: true,
+            count: staff.length,
+            staff
+        })
+    } catch (err) {
+        console.log("Get All Staff Error", err)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+}
 
 export const handlepromoteAdmin = async (req: Request, res: Response) => {
     try {
