@@ -331,3 +331,257 @@
     grid-template-columns: 1fr;
   }
 }
+.cart-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.cart-heading {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.cart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.cart-item-image {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.cart-item-price {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: #f87171;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+.cart-remove-btn:hover { opacity: 0.8; }
+
+.cart-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cart-total {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cart-checkout-btn, .cart-browse-btn {
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  margin: 15px;
+  cursor: pointer;
+  transition: opacity 0.15s var(--ease);
+}
+.cart-checkout-btn:hover, .cart-browse-btn:hover { opacity: 0.85; }
+
+/* ===== Page State (loading / error / empty) ===== */
+.page-state {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  
+}
+
+.page-state-text {
+  font-size: 15px;
+  color: #64748b;
+  letter-spacing: -0.01em;
+}
+
+.page-state-error {
+  color: #dc2626;
+}
+
+/* ===== Page Layout ===== */
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+.page-name {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  margin-bottom: 28px;
+}
+
+/* ===== Order Card ===== */
+.page-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  margin-top: 20px;
+}
+
+.page-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.page-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.page-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+/* Status pill — reuses .edit-hint but styled as a badge here */
+.page-card-header .edit-hint {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #1d4ed8;
+  background: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin: 0;
+}
+
+/* ===== Info Grid ===== */
+.page-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.page-info-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-info-row dt {
+  font-size: 13px;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.page-info-row dd {
+  margin: 0;
+  font-size: 13px;
+  color: #0f172a;
+  text-align: right;
+  font-weight: 500;
+}
+
+.page-info-row:last-child dt,
+.page-info-row:last-child dd {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Delivery address row can wrap onto its own line */
+.page-info-row:has(dt:contains("Delivery")) dd {
+  text-align: left;
+}
+
+/* ===== Cancel Button ===== */
+.field-edit-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc2626;
+  background: #fff;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.field-edit-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.field-edit-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .page {
+    padding: 32px 14px 60px;
+  }
+
+  .page-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .page-info-row dd {
+    text-align: left;
+  }
+}

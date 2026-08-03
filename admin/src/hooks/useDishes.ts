@@ -27,7 +27,7 @@ export const useDishes = () => {
       const { data } = await api.get("/admin/dishes");
       setDishes(data.dishes);
     } catch {
-      setError("Failed to load dishes");
+      // setError("Failed to load dishes");
     } finally {
       setIsLoading(false);
     }

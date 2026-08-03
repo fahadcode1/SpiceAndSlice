@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel";
@@ -22,7 +21,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
       return res.status(401).json({ message: "User not found" });
     }
 
-    req.user = { id: user._id.toString(), role: user.role };
+    req.user = { userId: user._id.toString(), role: user.role };
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid or expired token" });

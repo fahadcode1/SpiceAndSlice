@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom"
 import { ProtectedRoute } from "./ProtectedRoutes"
 import { PublicRoute } from "./PublicRoute"
-import { MyOrdersPage } from "../components/myOrders/ordersPage"
+import CreateOrderPage from "../pages/CreateOrderPage"
 // Layouts
 import Layout from "../components/layout/Layout"
 
@@ -13,7 +13,7 @@ import About from "../pages/About"
 import TermsOfService from "../pages/TermsOfService"
 import PrivacyPolicy from "../pages/PrivicyPolicy"
 import Contact from "../pages/Contact"
-
+import OrdersPage from "../pages/OrderPage"
 // Auth pages
 import { LoginPage } from "../components/auth/LoginPage"
 import { RegisterPage } from "../components/auth/RegisterPage"
@@ -67,8 +67,8 @@ export const AppRoutes = () => {
                     <Route path="/account/edit-mobile" element={<UpdateMobileNumber />} />
                     <Route path="/account/edit-email" element={<UpdateEmail />} />
                     <Route path="/account/delete-account" element={<DeleteAccount />} />
-
-                    <Route path="/account/my-orders" element={<MyOrdersPage/>} />
+                    <Route path="/create-order" element={<CreateOrderPage/>} />
+                    <Route path="/account/my-orders" element={<OrdersPage/>} />
                 </Route>
             </Route>
         </Routes>

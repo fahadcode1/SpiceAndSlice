@@ -27,16 +27,17 @@ export const handleGetMe = async (req : Request, res : Response) => {
             })
         }
         return res.status(200).json({
-            success: true,
-            message: "User fetched successfully",
-            user: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                mobileNumber: user.mobileNumber,
-                role : user.role
-            }
-        })
+                    success: true,
+                    message: "User fetched successfully",
+                    user: {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        mobileNumber: user.mobileNumber,
+                        role : user.role,
+                        addresses : user.addresses
+                    }
+                })
 
     } catch (err) {
         console.error('getMe error:', err)

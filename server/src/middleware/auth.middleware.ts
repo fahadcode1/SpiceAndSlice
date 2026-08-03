@@ -16,7 +16,7 @@ export const authMiddleware = async (req : Request, res : Response, next:NextFun
             })
         }
         const decoded = jwt.verify(token, config.jwtAccessSecret as string) as JwtPayload
-        req.user = {userId : decoded.id}
+        req.user = {userId : decoded.id, role: decoded.role}
         next()
 
 

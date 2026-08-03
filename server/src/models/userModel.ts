@@ -1,4 +1,13 @@
-import mongoose, { Document, Schema } from "mongoose"
+import mongoose, { Document, Schema, Types } from "mongoose"
+
+export interface IAddress {
+  _id?: Types.ObjectId;
+  streetAddress?: string;
+  city?: string;
+  state?: string;
+  zipcode?: string;
+  country?: string;
+}
 
 export interface IUser extends Document {
   firstName: string
@@ -17,8 +26,16 @@ export interface IUser extends Document {
   mobileNumberOtpExpiry?: Date | undefined
   resetPasswordToken?: string | undefined
   resetPasswordExpiresAt?: Date
+  addresses?: Types.DocumentArray<IAddress>
 }
 
+const addressSchema = new Schema<IAddress>({
+  streetAddress: { type: String, required: false },
+  city: { type: String, required: false },
+  state: { type: String, required: false },
+  zipcode: { type: String, required: false },
+  country: { type: String, required: false },
+})
 const userSchema = new Schema<IUser>(
   {
     firstName: { type: String, required: true },
@@ -30,6 +47,7 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
+
     pendingEmail: { type: String, default: null },
     isVerifiedPendingEmail : { type: Boolean, default: false },
     isVerifiedEmail: { type: Boolean, default: false },
@@ -51,6 +69,7 @@ const userSchema = new Schema<IUser>(
     mobileNumberOtpExpiry: { type: Date },
     resetPasswordToken: { type: String },
     resetPasswordExpiresAt: { type: Date },
+    addresses: [addressSchema],
   },
   { timestamps: true }
 )

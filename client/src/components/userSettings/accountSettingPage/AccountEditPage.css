@@ -85,3 +85,4 @@
 }
 .edit-submit-btn:hover:not(:disabled) { opacity: 0.85; }
 .edit-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+

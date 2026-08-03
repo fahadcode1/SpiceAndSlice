@@ -1,44 +1,40 @@
-import { Dish } from "../../hooks/useDishes";
+import { FoodItem } from "../../data/menuItems.ts";
+
 
 interface MenuCardProps {
-  food: Dish;
+  food: FoodItem;
   index: number;
   inCart: boolean;
-  onToggleCart: (food: Dish) => void;
-  onOrderNow: (food: Dish) => void;
+  onToggleCart: (food: FoodItem) => void;
 }
 
-export default function MenuCard({ food, index, inCart, onToggleCart, onOrderNow }: MenuCardProps) {
+// IMPORTANT !!!!
+// This file is only used to load dishes when the backend is not running.
+// Otherwise, dishes are loaded from the database via the backend.
+
+export default function MenuCard2({ food, index, inCart, onToggleCart }: MenuCardProps) {
+
   return (
-    <div
-      className="menu-card"
-      key={food._id}
+    <div className="menu-card" key={food.id}
       style={{ animationDelay: `${Math.min(index * 0.07, 0.4)}s` }}
     >
       <div className="menu-card-image">
-        <img src={food.photoUrl} alt={food.name} />
+        <img src={food.photo} />
       </div>
       <div className="menu-card-content">
         <div className="menu-card-header">
-          <h3 className="menu-card-title">{food.name}</h3>
+          <h3 className="menu-card-title">{food.title}</h3>
           <span className="menu-card-price">₹{food.price}</span>
         </div>
         <p className="menu-card-description">{food.description}</p>
         <div className="menu-card-footer">
           <span className={`menu-type ${food.type}`}>{food.type}</span>
-          {food.offers && <span className="menu-featured">🏷️ {food.offers}</span>}
+          {food.featured && <span className="menu-featured">⭐ Featured</span>}
         </div>
-        <button
-          className="order-btn"
-          disabled={!food.isAvailable}
-          onClick={() => onOrderNow(food)}
-        >
-          {food.isAvailable ? "Order Now" : "Unavailable"}
-        </button>
+        <button className="order-btn">Order Now</button>
         <button
           className={`cart-btn ${inCart ? "in-cart" : ""}`}
           onClick={() => onToggleCart(food)}
-          disabled={!food.isAvailable}
         >
           {inCart ? "✓ In Cart" : "🛒 Add to Cart"}
         </button>

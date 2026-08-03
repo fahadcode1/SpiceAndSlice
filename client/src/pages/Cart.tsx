@@ -1,95 +1,91 @@
-import { useState } from "react";
+import { useCart } from "../hooks/useCart";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useNavigate, Link } from "react-router-dom";
 import "./Pages.css";
 
-interface Values {
-  id: number
-  title: string
-  description: string
-  price: number
-  photo: string
-  type: string
-  featured: boolean
-}
+export default function CartPage() {
+  const { cart, isLoading, error, removeFromCart } = useCart();
+  const { user, isLoading: userLoading } = useCurrentUser();
+  const navigate = useNavigate();
 
-export default function Cart() {
-
-  const [cart, setCart] = useState<Values[]>(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const removeItem = (id:number) => {
-    setCart((prev) => {
-      const updated = prev.filter((item) => item.id !== id);
-      localStorage.setItem("cart", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem("cart");
-  };
-
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-
-  if (cart.length === 0) {
+  if (isLoading || userLoading) {
     return (
-      <div className="cart-empty">
-        <span>🛒</span>
-        <h2>Your cart is empty</h2>
-        <p>Go add some food!</p>
+      <div className="page-state">
+        <p className="page-state-text">Loading cart…</p>
       </div>
     );
   }
 
+  if (error) {
+    return (
+      <div className="page-state">
+        <p className="page-state-text page-state-error">{error}</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="page-state">
+        <p className="page-state-text">Please log in to view your cart.</p>
+        <Link to="/login" className="cart-browse-btn">
+          Go to Login
+        </Link>
+      </div>
+    );
+  }
+
+  if (cart.length === 0) {
+    return (
+      <div className="page-state">
+        <p className="page-state-text">Your cart is empty.</p>
+        <button className="cart-browse-btn" onClick={() => navigate("/menu")}>
+          Browse Menu
+        </button>
+      </div>
+    );
+  }
+
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.dish.price * item.quantity,
+    0
+  );
+
   return (
     <div className="cart-container">
-      <h1 className="menu-heading">Your Cart</h1>
+      <h1 className="cart-heading">Your Cart</h1>
 
-      <div className="cart-grid">
-        {cart.map(food => (
-          <div className="cart-card" key={food.id}>
-
-            <div className="cart-card-image">
-              <img src={food.photo} />
+      <div className="cart-list">
+        {cart.map((item) => (
+          <div className="cart-item" key={item.dish._id}>
+            <img
+              src={item.dish.photoUrl}
+              alt={item.dish.name}
+              className="cart-item-image"
+            />
+            <div className="cart-item-details">
+              <h3 className="cart-item-name">{item.dish.name}</h3>
+              <p className="cart-item-price">
+                ₹{item.dish.price} × {item.quantity} = ₹
+                {item.dish.price * item.quantity}
+              </p>
             </div>
-
-            <div className="cart-card-content">
-              <div className="cart-card-header">
-                <h3 className="cart-card-title">{food.title}</h3>
-                <span className="menu-card-price">₹{food.price}</span>
-              </div>
-
-              <p className="menu-card-description">{food.description}</p>
-
-              <div className="cart-card-footer">
-                <span className={`menu-type ${food.type}`}>{food.type}</span>
-                {food.featured && <span className="menu-featured">⭐ Featured</span>}
-              </div>
-
-              <button className="remove-btn" onClick={() => removeItem(food.id)}>
-                Remove
-              </button>
-            </div>
-
+            <button
+              className="cart-remove-btn"
+              onClick={() => removeFromCart(item.dish._id)}
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>
 
       <div className="cart-summary">
-        <div className="cart-total">
-          <span>Total</span>
-          <span>₹{total}</span>
-        </div>
-        <button className="order-btn" style={{ maxWidth: "300px" }}>
+        <span className="cart-total">Total: ₹{totalPrice}</span>
+        <button className="cart-checkout-btn" onClick={() => navigate("/create-order", { state: { items: cart } })}>
           Proceed to Checkout
         </button>
-        <button className="remove-btn clear-btn" onClick={clearCart}>
-          Clear Cart
-        </button>
       </div>
-
     </div>
   );
 }

@@ -1,40 +1,66 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
+import { api } from "../lib/api";
+import { Dish } from "./useDishes";
+
+export interface OrderItemPayload {
+  dish: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+}
+
+export interface ShippingAddress {
+  fullName: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phoneNumber: string;
+}
 
 export interface Order {
-  id: string;
-  // TODO: add real fields once order schema is finalized (items, total, status, createdAt, etc.)
+  _id: string;
+  orderItems: (OrderItemPayload & { dish: Dish })[];
+  shippingAddress: ShippingAddress;
+  paymentResult: { method: string };
+  totalPrice: number;
+  status: "pending" | "shipped" | "delivered" | "cancelled";
+  createdAt: string;
 }
 
-interface UseOrdersResult {
-  orders: Order[];
-  isLoading: boolean;
-  error: string | null;
-}
-
-export const useOrders = (): UseOrdersResult => {
+export const useOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setIsLoading(true);
-        // TODO: replace with actual API call, e.g.
-        // const res = await fetch(`${BASE_URL}/orders`, { credentials: "include" })
-        // const data = await res.json()
-        // setOrders(data.orders)
-
-        setOrders([]); // empty for now
-      } catch (err) {
-        setError("Failed to load orders. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchOrders();
+  const fetchOrders = useCallback(async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const { data } = await api.get("/user/orders");
+      setOrders(data.orders);
+    } catch {
+      setError("Failed to load orders");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  return { orders, isLoading, error };
+  const createOrder = async (payload: {
+    orderItems: OrderItemPayload[];
+    shippingAddress: ShippingAddress;
+    paymentMethod: string;
+    totalPrice: number;
+  }) => {
+    const { data } = await api.post("/user/orders", payload);
+    return data.order;
+  };
+
+  const cancelOrder = async (orderId: string) => {
+    const { data } = await api.patch(`user/orders/${orderId}/cancel`);
+    setOrders((prev) => prev.map((o) => (o._id === orderId ? data.order : o)));
+  };
+
+  return { orders, isLoading, error, fetchOrders, createOrder, cancelOrder };
 };

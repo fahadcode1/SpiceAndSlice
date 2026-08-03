@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMe, type CurrentUser } from "../services/authService";
-import { useNavigate } from "react-router-dom";
 
 export const useCurrentUser = () => {
-    const navigate = useNavigate()
     const [user, setUser] = useState<CurrentUser | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -15,7 +13,8 @@ export const useCurrentUser = () => {
                 setUser(result.user)
             } catch (err: any) {
                 if (err?.response?.status === 401) {
-                    navigate("/login")
+                   
+                    setUser(null)
                 } else {
                     setError(err?.response?.data?.message || "Failed to load user")
                 }

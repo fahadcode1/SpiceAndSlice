@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useAuthStore } from "../../store/authStore";
+import { AddressManager } from "./accountSettingPage/AddressManager";
 import "./DashboardPage.css";
 
 
@@ -134,7 +135,8 @@ export const DashboardPage = () => {
           </div>
         </dl>
       </div>
+
+      <AddressManager initialAddresses={user.addresses || []} />
     </div>
   );
 };
-

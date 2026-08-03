@@ -11,25 +11,25 @@ export default function WhyUs() {
   const reasons : Values[] = [
       {
         id:0,
-        icon: "🔥",
+        icon: "",
         title: "Made Fresh Daily",
         desc: "Every dish is prepared the same day, no reheated leftovers, ever.",
       },
       {
         id:1,
-        icon: "⚡",
+        icon: "",
         title: "30-Minute Delivery",
         desc: "We guarantee your food arrives hot and on time, or your next order is on us.",
       },
       {
         id:2,
-        icon: "🌿",
+        icon: "",
         title: "Quality Ingredients",
         desc: "Sourced from trusted local suppliers. Clean, wholesome, and traceable.",
       },
       {
         id:3,
-        icon: "💬",
+        icon: "",
         title: "Real Support",
         desc: "Humans, not bots. Our team is available 7 days a week to help you.",
       },

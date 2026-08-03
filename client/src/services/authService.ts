@@ -100,12 +100,24 @@ export const loginUser = async (credentials: LoginPayload) => {
     }
 }
 
+export interface Address {
+    _id?: string
+    streetAddress: string
+    city: string
+    state: string
+    zipcode: string
+    country: string
+}
+
 export interface CurrentUser {
     firstName: string
     lastName: string
     email: string
     mobileNumber: string
+    addresses?: Address[]
 }
+
+
 
 export const getMe = async (): Promise<{ success: boolean; user: CurrentUser }> => {
     try {
