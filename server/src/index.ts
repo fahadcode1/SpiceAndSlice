@@ -24,12 +24,9 @@ app.post("/api/webhook/stripe", express.raw({ type: "application/json" }), handl
 app.use(express.json())
 app.use(cookieParser())
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://drivelegalassistant.vercel.app',
-];
-
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
+  : [];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
