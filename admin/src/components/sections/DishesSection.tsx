@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDishes, type Dish, type DishFormData } from "../../hooks/useDishes";
 import "./DishesSection.css";
 
+
 const emptyForm: DishFormData = {
   name: "",
   description: "",

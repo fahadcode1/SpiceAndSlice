@@ -1,11 +1,11 @@
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
+import Mailjet from "node-mailjet";
 import { IUser } from "../models/userModel";
 
-// generate 6 digit otp
+// generate 4 digit otp
 const generateOtp = () => {
-    return crypto.randomInt(1000, 10000).toString();
+  return crypto.randomInt(1000, 10000).toString();
 };
 
 const buildOtpEmailHtml = (otp: string, appName: string) => `
@@ -48,31 +48,40 @@ const buildOtpEmailHtml = (otp: string, appName: string) => `
 </html>
 `;
 
+const mailjet = Mailjet.apiConnect(
+  process.env.MAILJET_API_KEY as string,
+  process.env.MAILJET_SECRET_KEY as string
+);
+
 export const sendEmailVerificationOtp = async (user: IUser) => {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_APP_PASS,
+  const otp = generateOtp();
+  console.log(otp);
+  const hashedOtp = await bcrypt.hash(otp, 10);
+  const emailToSend = user.pendingEmail || user.email;
+  console.log(emailToSend);
+
+  user.emailOtp = hashedOtp;
+  user.emailOtpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+  await user.save();
+
+  const appName = process.env.APP_NAME || "Spice and Slice";
+
+  await mailjet.post("send", { version: "v3.1" }).request({
+    Messages: [
+      {
+        From: {
+          Email: process.env.MAILJET_FROM_EMAIL as string,
+          Name: appName,
         },
-    });
-
-    const otp = generateOtp();
-    console.log(otp)
-    const hashedOtp = await bcrypt.hash(otp, 10);
-    const emailToSend = user.pendingEmail || user.email
-    console.log(emailToSend)
-    user.emailOtp = hashedOtp;
-    user.emailOtpExpiry = new Date(Date.now() + 10 * 60 * 1000);
-    await user.save();
-
-    const appName = process.env.APP_NAME || "Spice and Slice";
-
-    await transporter.sendMail({
-        from: `"${appName}" <${process.env.GMAIL_USER}>`,
-        to: emailToSend,
-        subject: `${otp} is your verification code`,
-        text: `Your ${appName} verification code is ${otp}. It expires in 10 minutes. Do not share it with anyone.`,
-        html: buildOtpEmailHtml(otp, appName),
-    });
+        To: [
+          {
+            Email: emailToSend,
+          },
+        ],
+        Subject: `${otp} is your verification code`,
+        TextPart: `Your ${appName} verification code is ${otp}. It expires in 10 minutes. Do not share it with anyone.`,
+        HTMLPart: buildOtpEmailHtml(otp, appName),
+      },
+    ],
+  });
 };

@@ -7,7 +7,7 @@ import { MdOutlineManageAccounts } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
 import { useAuthStore } from "../../store/authStore";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
-import SearchBar from "./Searchbar";
+// import SearchBar from "./Searchbar";
 import "./Layout.css";
 
 type NavbarItem = {
@@ -45,7 +45,7 @@ export default function NavBar() {
 
       {/* Search */}
       <div className="navbar-searchToggle">
-        <SearchBar />
+        {/* <SearchBar /> */}
       </div>
 
       {/* Nav items */}

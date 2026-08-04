@@ -2,7 +2,8 @@ import config from '../config/config'
 import userModel from "../models/userModel"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcryptjs"
-import { sendEmailVerificationOtp } from "../utils/sendEmailOtp"
+// import { sendEmailVerificationOtp } from "../utils/sendEmailOtp"
+import { sendEmailVerificationOtp } from '../utils/mailer'
 import { Request, Response } from "express"
 import { JwtPayload } from "jsonwebtoken"
 

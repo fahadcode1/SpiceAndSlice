@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import { useOrders, ShippingAddress } from "../hooks/useOrders";
-import { Dish } from "../hooks/useDishes";
+import { useOrders, type ShippingAddress } from "../hooks/useOrders";
+import { usePayment } from "../hooks/usePayment";
+import type { Dish } from "../hooks/useDishes";
 
 interface IncomingItem {
   dish: Dish;
   quantity: number;
 }
 
+type PaymentMethod = "COD" | "STRIPE";
+
 export default function CreateOrderPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { createOrder } = useOrders();
+  const { payOnline, isRedirecting, error: paymentError } = usePayment();
 
   const items: IncomingItem[] = (location.state as any)?.items || [];
 
   const [selectedAddressId, setSelectedAddressId] = useState<string>("manual");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("COD");
   const [formData, setFormData] = useState<ShippingAddress>({
     fullName: user ? `${user.firstName} ${user.lastName}` : "",
     phoneNumber: user?.mobileNumber || "",
@@ -29,7 +34,7 @@ export default function CreateOrderPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
+  // user async load hota hai — jab bhi user milta hai, fullName/phoneNumber sync karo
   useEffect(() => {
     if (user) {
       setFormData((prev) => ({
@@ -91,39 +96,49 @@ export default function CreateOrderPage() {
         image: item.dish.photoUrl,
       }));
 
-     await createOrder({
+      const order = await createOrder({
         orderItems,
         shippingAddress: formData,
-        paymentMethod: "COD",
+        paymentMethod,
         totalPrice,
       });
 
-      navigate("/account/my-orders");
+      if (paymentMethod === "STRIPE") {
+        // Order ban gaya, ab Stripe checkout pe redirect karo
+        await payOnline(order._id);
+        // payOnline khud window.location.href se redirect kar dega
+      } else {
+        navigate("/account/my-orders");
+      }
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to place order");
-    } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="edit-card">
-      <h2 className="edit-title">Confirm Order</h2>
+  const isBusy = loading || isRedirecting;
 
-      <div className="edit-form">
+  return (
+    <div className="order-page">
+      <h2 className="order-title">Confirm Order</h2>
+
+      <div className="order-items">
         {items.map((item) => (
           <p key={item.dish._id} className="edit-hint">
             {item.dish.name} × {item.quantity} — ₹{item.dish.price * item.quantity}
           </p>
         ))}
-        <p className="edit-hint" style={{ fontWeight: 600 }}>Total: ₹{totalPrice}</p>
+        <p className="edit-hint order-total">Total: ₹{totalPrice}</p>
       </div>
 
-      <h3 className="edit-title" style={{ fontSize: "15px", marginTop: "20px" }}>Delivery Address</h3>
+      <h3 className="order-subtitle">Delivery Address</h3>
 
-      <div className="edit-form">
+      <div className="order-grid">
         {user?.addresses?.map((addr) => (
-          <label key={addr._id} className="edit-label" style={{ flexDirection: "row", alignItems: "center", gap: "10px" }}>
+          <label
+            key={addr._id}
+            className="order-radio-row order-radio-row--full"
+          >
             <input
               type="radio"
               name="addressChoice"
@@ -133,7 +148,8 @@ export default function CreateOrderPage() {
             {addr.streetAddress}, {addr.city}, {addr.state} {addr.zipcode}
           </label>
         ))}
-        <label className="edit-label" style={{ flexDirection: "row", alignItems: "center", gap: "10px" }}>
+
+        <label className="order-radio-row order-radio-row--full">
           <input
             type="radio"
             name="addressChoice"
@@ -143,7 +159,7 @@ export default function CreateOrderPage() {
           Enter a new address
         </label>
 
-        <label className="edit-label">
+        <label className="order-field order-field--full">
           Full Name
           <input
             className="edit-input"
@@ -153,7 +169,8 @@ export default function CreateOrderPage() {
             readOnly
           />
         </label>
-        <label className="edit-label">
+
+        <label className="order-field">
           Phone Number
           <input
             className="edit-input"
@@ -163,29 +180,99 @@ export default function CreateOrderPage() {
             readOnly
           />
         </label>
-        <label className="edit-label">
+
+        <label className="order-field">
           Street Address
-          <input className="edit-input" name="streetAddress" value={formData.streetAddress} onChange={handleChange} disabled={selectedAddressId !== "manual"} />
+          <input
+            className="edit-input"
+            name="streetAddress"
+            value={formData.streetAddress}
+            onChange={handleChange}
+            disabled={selectedAddressId !== "manual"}
+          />
         </label>
-        <label className="edit-label">
+
+        <label className="order-field">
           City
-          <input className="edit-input" name="city" value={formData.city} onChange={handleChange} disabled={selectedAddressId !== "manual"} />
+          <input
+            className="edit-input"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            disabled={selectedAddressId !== "manual"}
+          />
         </label>
-        <label className="edit-label">
+
+        <label className="order-field">
           State
-          <input className="edit-input" name="state" value={formData.state} onChange={handleChange} disabled={selectedAddressId !== "manual"} />
+          <input
+            className="edit-input"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            disabled={selectedAddressId !== "manual"}
+          />
         </label>
-        <label className="edit-label">
+
+        <label className="order-field order-field--full">
           Zip Code
-          <input className="edit-input" name="zipCode" value={formData.zipCode} onChange={handleChange} disabled={selectedAddressId !== "manual"} />
+          <input
+            className="edit-input"
+            name="zipCode"
+            value={formData.zipCode}
+            onChange={handleChange}
+            disabled={selectedAddressId !== "manual"}
+          />
+        </label>
+      </div>
+
+      <h3 className="order-subtitle">Payment Method</h3>
+
+      <div className="order-payment-grid">
+        <label
+          className="edit-label payment-option"
+          data-selected={paymentMethod === "COD"}
+        >
+          <input
+            type="radio"
+            name="paymentMethod"
+            checked={paymentMethod === "COD"}
+            onChange={() => setPaymentMethod("COD")}
+          />
+          <span>
+            <strong>Cash on Delivery</strong>
+            <small>Pay when your order arrives</small>
+          </span>
         </label>
 
-        {error && <p className="edit-error">{error}</p>}
-
-        <button className="edit-submit-btn" onClick={handlePlaceOrder} disabled={loading}>
-          {loading ? "Placing Order..." : "Place Order (Cash on Delivery)"}
-        </button>
+        <label
+          className="edit-label payment-option"
+          data-selected={paymentMethod === "STRIPE"}
+        >
+          <input
+            type="radio"
+            name="paymentMethod"
+            checked={paymentMethod === "STRIPE"}
+            onChange={() => setPaymentMethod("STRIPE")}
+          />
+          <span>
+            <strong>Pay Online</strong>
+            <small>Card, iDEAL, and more via Stripe</small>
+          </span>
+        </label>
       </div>
+
+      {(error || paymentError) && <p className="edit-error">{error || paymentError}</p>}
+
+      <button className="edit-submit-btn order-submit" onClick={handlePlaceOrder} disabled={isBusy}>
+        {isRedirecting
+          ? "Redirecting to payment…"
+          : loading
+          ? "Placing Order..."
+          : paymentMethod === "STRIPE"
+          ? "Proceed to Payment"
+          : "Place Order (Cash on Delivery)"}
+      </button>
     </div>
   );
 }

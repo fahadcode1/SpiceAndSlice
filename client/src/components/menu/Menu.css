@@ -1,4 +1,3 @@
-
 .menu-section {
   padding: 4rem 2rem;
   background-color: transparent;
@@ -29,27 +28,26 @@
 .menu-card {
   position: relative;
   padding: 0;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: border-color 0.2s ease;
-  backdrop-filter: blur(5px);
   margin-left: 15px;
   margin-bottom: 30px;
 }
 
 .menu-card:hover {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: #3a3a3a;
 }
 
 .menu-card-image {
   height: 350px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #141414;
+  border-bottom: 1px solid #2a2a2a;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +58,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .menu-card-content {
@@ -88,16 +86,16 @@
 .menu-card-price {
   font-size: 1rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  background: #242424;
   padding: 0.2rem 0.7rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  border: 1px solid #333333;
 }
 
 .menu-card-description {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: #999999;
   line-height: 1.6;
   margin: 0 0 1.25rem 0;
   flex: 1;
@@ -109,7 +107,7 @@
   align-items: center;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid #2a2a2a;
 }
 
 .menu-type {
@@ -119,37 +117,37 @@
   letter-spacing: 0.5px;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cccccc;
+  border: 1px solid #333333;
 }
 
 .menu-type.veg {
-  background: rgba(76, 175, 80, 0.12);
-  border-color: rgba(76, 175, 80, 0.25);
-  color: #a5d6a7;
+  background: #16281a;
+  border-color: #2d5934;
+  color: #7bc47f;
 }
 
 .menu-type.non-veg {
-  background: rgba(244, 67, 54, 0.12);
-  border-color: rgba(244, 67, 54, 0.25);
-  color: #ef9a9a;
+  background: #2b1616;
+  border-color: #5c2d2d;
+  color: #e07a7a;
 }
 
 .menu-featured {
   font-size: 0.7rem;
   font-weight: 600;
   color: #ffb74d;
-  background: rgba(255, 183, 77, 0.08);
-  border: 1px solid rgba(255, 183, 77, 0.2);
+  background: #2b2210;
+  border: 1px solid #4d3d1a;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
   letter-spacing: 0.3px;
 }
 
 .order-btn {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #242424;
+  color: #ffffff;
+  border: 1px solid #333333;
   padding: 0.65rem 1.5rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -162,8 +160,8 @@
 }
 
 .order-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.28);
+  background: #2e2e2e;
+  border-color: #444444;
 }
 
 .order-btn:active {
@@ -200,9 +198,9 @@
 }
 
 .menu-filters-btns button {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #1a1a1a;
+  color: #999999;
+  border: 1px solid #2a2a2a;
   padding: 0.45rem 1.2rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -213,21 +211,21 @@
 }
 
 .menu-filters-btns button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.9);
+  background: #242424;
+  border-color: #3a3a3a;
+  color: #ffffff;
 }
 
 .menu-filters-btns button.active {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #333333;
+  border-color: #444444;
   color: #ffffff;
 }
 
 .cart-btn {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #1a1a1a;
+  color: #cccccc;
+  border: 1px solid #2a2a2a;
   padding: 0.65rem 1.5rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -240,19 +238,19 @@
 }
 
 .cart-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: #242424;
+  border-color: #3a3a3a;
   color: #ffffff;
 }
 
 .cart-btn.in-cart {
-  background: rgba(76, 175, 80, 0.12);
-  border-color: rgba(76, 175, 80, 0.35);
-  color: #a5d6a7;
+  background: #16281a;
+  border-color: #2d5934;
+  color: #7bc47f;
 }
 
 .cart-btn.in-cart:hover {
-  background: rgba(244, 67, 54, 0.1);
-  border-color: rgba(244, 67, 54, 0.3);
-  color: #ef9a9a;
+  background: #2b1616;
+  border-color: #5c2d2d;
+  color: #e07a7a;
 }

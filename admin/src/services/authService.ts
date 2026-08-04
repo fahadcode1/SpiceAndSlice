@@ -80,7 +80,7 @@ interface LoginPayload {
 
 export const loginUser = async (credentials: LoginPayload) => {
     try {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
+        const response = await fetch(`${BASE_URL}/admin/staffs/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

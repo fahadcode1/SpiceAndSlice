@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import { api } from "../lib/api";
-
+import { api } from "../api/axios";
+import type { Dish } from "./useDishes";
 
 export interface OrderItemPayload {
   dish: string;
@@ -9,10 +9,20 @@ export interface OrderItemPayload {
   quantity: number;
   image?: string;
 }
+
+export interface ShippingAddress {
+  fullName: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phoneNumber: string;
+}
+
 export interface Order {
   _id: string;
-  orderItems: { name: string; price: number; quantity: number; dish: any }[];
-  shippingAddress: { fullName: string; phoneNumber: string; streetAddress: string; city: string; state: string; zipCode: string };
+  orderItems: (OrderItemPayload & { dish: Dish })[];
+  shippingAddress: ShippingAddress;
   paymentResult: {
     method: "COD" | "STRIPE";
     id?: string;
@@ -25,17 +35,6 @@ export interface Order {
   createdAt: string;
 }
 
-export interface ShippingAddress {
-  fullName: string;
-  streetAddress: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  phoneNumber: string;
-}
-
-
-
 export const useOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +44,7 @@ export const useOrders = () => {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await api.get("/user/orders");
+      const { data } = await api.get("/admin/orders");
       setOrders(data.orders);
     } catch {
       setError("Failed to load orders");
@@ -60,7 +59,7 @@ export const useOrders = () => {
     paymentMethod: string;
     totalPrice: number;
   }) => {
-    const { data } = await api.post("/user/orders", payload);
+    const { data } = await api.post("/admin/orders", payload);
     return data.order;
   };
 

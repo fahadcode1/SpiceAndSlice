@@ -1,0 +1,361 @@
+/* ===== Page Layout ===== */
+.page {
+  max-width: 2100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.page-name {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text, #f5f0e8);
+  margin-bottom: 28px;
+}
+
+/* ===== Page State (loading / error / empty) ===== */
+.page-state {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.page-state-text {
+  font-size: 15px;
+  color: var(--text-muted, #94a3b8);
+  letter-spacing: -0.01em;
+}
+
+.page-state-error {
+  color: #f87171;
+}
+
+/* ===== Orders Grid ===== */
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+/* ===== Order Card ===== */
+.page-card {
+  background: var(--surface, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin: 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.page-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.page-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text, #f5f0e8);
+  letter-spacing: -0.01em;
+}
+
+/* Status pill */
+.page-card-header .edit-hint {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #F7B41A;
+  background: rgba(247, 180, 26, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin: 0;
+}
+
+/* ===== Info Grid ===== */
+.page-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  flex: 1;
+}
+
+.page-info-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-info-row dt {
+  font-size: 13px;
+  color: var(--text-muted, #94a3b8);
+  flex-shrink: 0;
+}
+
+.page-info-row dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text, #f5f0e8);
+  text-align: right;
+  font-weight: 500;
+}
+
+.page-info-row:last-child dt,
+.page-info-row:last-child dd {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Delivery address row: let it wrap left-aligned */
+.page-info-row.address-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.page-info-row.address-row dd {
+  text-align: left;
+}
+
+/* ===== Buttons ===== */
+.field-edit-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f87171;
+  background: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.field-edit-btn:hover {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.field-edit-btn:focus-visible {
+  outline: 2px solid #F7B41A;
+  outline-offset: 2px;
+}
+
+.edit-paynow-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  margin-top: 16px;
+
+  background: transparent;
+  color: rgba(240, 237, 232, 0.7);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+
+  font-size: 12.5px;
+  font-weight: 500;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.edit-paynow-submit-btn:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.edit-paynow-submit-btn:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.edit-paynow-submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ===== Payment Option (used on CreateOrderPage too) ===== */
+.payment-option {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 12px !important;
+  padding: 12px 14px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.payment-option:last-child {
+  margin-bottom: 0;
+}
+
+.payment-option[data-selected="true"] {
+  border-color: #F7B41A;
+  background: rgba(247, 180, 26, 0.08);
+}
+
+.payment-option span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payment-option strong {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.payment-option small {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== Banners ===== */
+.payment-banner {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.payment-banner--success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.payment-banner--cancelled {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .page {
+    padding: 32px 14px 60px;
+  }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.order-page {
+  max-width: 960px;
+  margin: 40px auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  font-family: var(--font-body);
+}
+
+.order-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.order-subtitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--accent);
+  margin: 24px 0 12px;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-total {
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── 2-column grid for address fields ── */
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 16px;
+}
+
+.order-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.order-field--full {
+  grid-column: 1 / -1;
+}
+
+.order-radio-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.order-radio-row--full {
+  grid-column: 1 / -1;
+}
+
+/* ── 2-column grid for payment options ── */
+.order-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.order-submit {
+  width: 100%;
+  margin-top: 24px;
+}
+
+@media (max-width: 560px) {
+  .order-grid,
+  .order-payment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-field--full,
+  .order-radio-row--full {
+    grid-column: 1;
+  }
+}

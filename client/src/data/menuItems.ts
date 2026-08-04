@@ -24,6 +24,7 @@ export interface FoodItem {
   price: number;
   offers: object;
   addToCart: boolean;
+  isAvailable?: boolean; 
 }
 
 export interface CartItem extends FoodItem {

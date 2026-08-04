@@ -5,7 +5,8 @@ import sessionModel from "../models/sessionModel"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import jwt from 'jsonwebtoken';
-import { sendEmailVerificationOtp } from "../utils/sendEmailOtp"
+// import { sendEmailVerificationOtp } from "../utils/sendEmailOtp"
+import { sendEmailVerificationOtp } from '../utils/mailer'
 import { Request, Response } from "express"
 import { JwtPayload } from "jsonwebtoken"
 

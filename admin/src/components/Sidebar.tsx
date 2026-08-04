@@ -7,6 +7,7 @@ const navItems = [
   { to: "/dashboard/dishes", label: "Dishes" },
   { to: "/dashboard/orders", label: "Orders" },
   { to: "/dashboard/admins", label: "Admin List" },
+  { to: "/dashboard/order-history", label: "Order-History" },
 ];
 
 export const Sidebar = () => {

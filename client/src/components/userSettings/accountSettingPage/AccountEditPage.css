@@ -64,6 +64,7 @@
   font-size: 14px;
   color: var(--text-muted);
   margin: 0 0 8px;
+  margin: 5px;
 }
 
 .edit-error {

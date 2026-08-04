@@ -7,7 +7,8 @@ import { DashboardLayout } from "../layout/DashboardLayout"
 import { DishesSection } from "../components/sections/DishesSection"
 import { AdminList } from "../components/sections/AdminList"
 import { StaffDashboardPage } from "../pages/StaffDashboard"
-
+import StaffOrdersPage from "../components/sections/StaffOrdersPage"
+import OrderHistoryPage from "../components/sections/OrdersHistoryPage"
 export const AuthRoutes = () => {
     return (
         <Routes>
@@ -25,7 +26,9 @@ export const AuthRoutes = () => {
                     <Route index element={<Navigate to="dishes" replace />} />
                     <Route path="dishes" element={<DishesSection />} />
                     <Route path="admins" element={<AdminList />} />
+                    <Route path="orders" element={<StaffOrdersPage />} />
                     <Route path="profile" element={<StaffDashboardPage />} />
+                    <Route path="order-history" element={<OrderHistoryPage />} />
                 </Route>
             </Route>
 

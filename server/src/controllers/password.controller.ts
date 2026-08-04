@@ -2,8 +2,8 @@ import userModel from "../models/userModel"
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
 import { Request, Response } from "express"
-import { sendResetPasswordEmail } from "../utils/sendPassReset"
-
+// import { sendResetPasswordEmail } from "../utils/sendPassReset"
+import { sendResetPasswordEmail } from "../utils/passResetMailer"
 
 
 export const handleForgotPassword = async (req : Request, res : Response) => {

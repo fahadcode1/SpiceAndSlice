@@ -1,3 +1,4 @@
+
 import { Schema, model, Document, Types } from "mongoose";
 
 export interface IOrderItem {
@@ -18,9 +19,11 @@ export interface IShippingAddress {
 }
 
 export interface IPaymentResult {
-  method: "COD";
+  method: "COD" | "STRIPE";
   id?: string;
-  status?: string;
+  status?: "pending" | "paid" | "verified" | "failed";
+  verifiedBy?: Types.ObjectId;
+  verifiedAt?: Date;
 }
 
 export interface IOrder extends Document {
@@ -29,7 +32,7 @@ export interface IOrder extends Document {
   shippingAddress: IShippingAddress;
   paymentResult: IPaymentResult;
   totalPrice: number;
-  status: "pending" | "shipped" | "delivered" | "cancelled";
+  status: "pending" | "approved" | "cooking" | "packing" | "out_for_delivery" | "payment_completed" | "order_completed" | "cancelled";
   deliveredAt?: Date;
   shippedAt?: Date;
   createdAt: Date;
@@ -38,102 +41,49 @@ export interface IOrder extends Document {
 
 const orderItemSchema = new Schema<IOrderItem>(
   {
-    dish: {
-      type: Schema.Types.ObjectId,
-      ref: "Dish",
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-    image: {
-      type: String,
-    },
+    dish: { type: Schema.Types.ObjectId, ref: "Dish", required: true },
+    name: { type: String, required: true },
+    price: { type: Number, required: true, min: 0 },
+    quantity: { type: Number, required: true, min: 1 },
+    image: { type: String },
   },
   { _id: false }
 );
 
 const shippingAddressSchema = new Schema<IShippingAddress>(
   {
-    fullName: {
-      type: String,
-      required: true,
-    },
-    streetAddress: {
-      type: String,
-      required: true,
-    },
-    city: {
-      type: String,
-      required: true,
-    },
-    state: {
-      type: String,
-      required: true,
-    },
-    zipCode: {
-      type: String,
-      required: true,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
+    fullName: { type: String, required: true },
+    streetAddress: { type: String, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    zipCode: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
   },
   { _id: false }
 );
 
 const orderSchema = new Schema<IOrder>(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    user: { type: Schema.Types.ObjectId, ref: "user", required: true },
     orderItems: [orderItemSchema],
-    shippingAddress: {
-      type: shippingAddressSchema,
-      required: true,
-    },
+    shippingAddress: { type: shippingAddressSchema, required: true },
     paymentResult: {
-      method: {
-        type: String,
-        enum: ["COD"],
-        required: true,
-        default: "COD",
-      },
+      method: { type: String, enum: ["COD", "STRIPE"], required: true, default: "COD" },
       id: String,
-      status: String,
+      status: { type: String, enum: ["pending", "paid", "verified", "failed"], default: "pending" },
+      verifiedBy: { type: Schema.Types.ObjectId, ref: "user" },
+      verifiedAt: Date,
     },
-    totalPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
+    totalPrice: { type: Number, required: true, min: 0 },
     status: {
       type: String,
-      enum: ["pending", "shipped", "delivered", "cancelled"],
+      enum: ["pending", "approved", "cooking", "packing", "out_for_delivery", "payment_completed", "order_completed", "cancelled"],
       default: "pending",
     },
-    deliveredAt: {
-      type: Date,
-    },
-    shippedAt: {
-      type: Date,
-    },
+    deliveredAt: { type: Date },
+    shippedAt: { type: Date },
   },
   { timestamps: true }
 );
 
-export const Order = model<IOrder>("Order", orderSchema);  
+export const Order = model<IOrder>("Order", orderSchema);
