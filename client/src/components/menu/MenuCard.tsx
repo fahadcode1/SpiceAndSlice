@@ -21,7 +21,7 @@ export default function MenuCard({ food, index, inCart, onToggleCart, onOrderNow
       <div className="menu-card-content">
         <div className="menu-card-header">
           <h3 className="menu-card-title">{food.name}</h3>
-          <span className="menu-card-price">₹{food.price}</span>
+          <span className="menu-card-price">€{food.price}</span>
         </div>
         <p className="menu-card-description">{food.description}</p>
         <div className="menu-card-footer">

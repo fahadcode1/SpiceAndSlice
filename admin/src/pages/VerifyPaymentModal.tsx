@@ -19,7 +19,7 @@ export default function VerifyPaymentModal({ order, onConfirm, onCancel, loading
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <h3 className="modal-title">Verify Payment — Order #{order._id.slice(-6)}</h3>
         <p className="edit-hint" style={{ marginBottom: "16px" }}>
-          Total: ₹{order.totalPrice} · Payment ID: {order.paymentResult.id || "N/A"}
+          Total: €{order.totalPrice} · Payment ID: {order.paymentResult.id || "N/A"}
         </p>
 
         <label className="modal-checkbox-row">
@@ -37,7 +37,7 @@ export default function VerifyPaymentModal({ order, onConfirm, onCancel, loading
             checked={checkedAmount}
             onChange={(e) => setCheckedAmount(e.target.checked)}
           />
-          <span>I confirm the amount received matches ₹{order.totalPrice}.</span>
+          <span>I confirm the amount received matches €{order.totalPrice}.</span>
         </label>
 
         <div className="modal-actions">

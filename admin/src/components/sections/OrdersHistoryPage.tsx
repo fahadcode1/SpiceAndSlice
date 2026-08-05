@@ -62,14 +62,14 @@ export default function OrderHistoryPage() {
                   <dt>{item.name}</dt>
                   <dd>
                     <span>
-                      {item.quantity} × ₹{item.price} = ₹{item.quantity * item.price}
+                      {item.quantity} × €{item.price} = €{item.quantity * item.price}
                     </span>
                   </dd>
                 </div>
               ))}
               <div className="page-info-row">
                 <dt>Total</dt>
-                <dd><span>₹{totalPrice}</span></dd>
+                <dd><span>€{totalPrice}</span></dd>
               </div>
               <div className="page-info-row">
                 <dt>Delivered To</dt>

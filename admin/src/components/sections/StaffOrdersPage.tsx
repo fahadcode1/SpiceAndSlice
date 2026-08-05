@@ -130,7 +130,7 @@ export default function StaffOrdersPage() {
                 <div className="staff-order-info">
                   <p className="staff-order-id">Order #{order._id.slice(-6)}</p>
                   <p className="edit-hint">{STATUS_LABEL[order.status]}</p>
-                  <p className="edit-hint">Total: ₹{order.totalPrice}</p>
+                  <p className="edit-hint">Total: €{order.totalPrice}</p>
                   <p className="edit-hint">{order.shippingAddress.fullName} — {order.shippingAddress.phoneNumber}</p>
                   <p className={`edit-hint ${needsVerification ? "payment-flag" : ""}`}>
                     Payment: {order.paymentResult.method === "STRIPE"

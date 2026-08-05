@@ -87,13 +87,13 @@ export default function OrdersPage() {
                 <div className="page-info-row" key={idx}>
                   <dt>{item.name}</dt>
                   <dd>
-                    <span>{item.quantity} × ₹{item.price} = ₹{item.quantity * item.price}</span>
+                    <span>{item.quantity} × €{item.price} = €{item.quantity * item.price}</span>
                   </dd>
                 </div>
               ))}
               <div className="page-info-row">
                 <dt>Total</dt>
-                <dd><span>₹{order.totalPrice}</span></dd>
+                <dd><span>€{order.totalPrice}</span></dd>
               </div>
               <div className="page-info-row">
                 <dt>Payment</dt>

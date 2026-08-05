@@ -37,7 +37,7 @@ export default function ShippingLabel({ order, onClose }: ShippingLabelProps) {
 
           <div className="label-section">
             <p className="label-heading">Payment</p>
-            <p>{order.paymentResult.method} — ₹{order.totalPrice}</p>
+            <p>{order.paymentResult.method} — €{order.totalPrice}</p>
           </div>
         </div>
 

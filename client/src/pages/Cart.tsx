@@ -66,7 +66,7 @@ export default function CartPage() {
             <div className="cart-item-details">
               <h3 className="cart-item-name">{item.dish.name}</h3>
               <p className="cart-item-price">
-                ₹{item.dish.price} × {item.quantity} = ₹
+                €{item.dish.price} × {item.quantity} = €
                 {item.dish.price * item.quantity}
               </p>
             </div>
@@ -81,7 +81,7 @@ export default function CartPage() {
       </div>
 
       <div className="cart-summary">
-        <span className="cart-total">Total: ₹{totalPrice}</span>
+        <span className="cart-total">Total: €{totalPrice}</span>
         <button className="cart-checkout-btn" onClick={() => navigate("/create-order", { state: { items: cart } })}>
           Proceed to Checkout
         </button>

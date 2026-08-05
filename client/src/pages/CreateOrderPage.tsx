@@ -125,10 +125,10 @@ export default function CreateOrderPage() {
       <div className="order-items">
         {items.map((item) => (
           <p key={item.dish._id} className="edit-hint">
-            {item.dish.name} × {item.quantity} — ₹{item.dish.price * item.quantity}
+            {item.dish.name} × {item.quantity} — €{item.dish.price * item.quantity}
           </p>
         ))}
-        <p className="edit-hint order-total">Total: ₹{totalPrice}</p>
+        <p className="edit-hint order-total">Total: €{totalPrice}</p>
       </div>
 
       <h3 className="order-subtitle">Delivery Address</h3>

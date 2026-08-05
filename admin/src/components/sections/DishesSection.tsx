@@ -99,7 +99,7 @@ export const DishesSection = () => {
                 <tr key={dish._id}>
                   <td>{dish.name}</td>
                   <td>{dish.type}</td>
-                  <td>₹{dish.price}</td>
+                  <td>€{dish.price}</td>
                   <td>{dish.stock}</td>
                   <td>{dish.isAvailable ? "Yes" : "No"}</td>
                   <td className="dishes-actions">
