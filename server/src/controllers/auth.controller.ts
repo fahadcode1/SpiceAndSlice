@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 import { sendEmailVerificationOtp } from '../utils/mailer'
 import { Request, Response } from "express"
 import { JwtPayload } from "jsonwebtoken"
+import { clearAuthCookies } from '../utils/cookies.util'
 
 
 
@@ -345,103 +346,121 @@ export const handleLogin = async (req: Request, res: Response) => {
 }
 
 
-export const handleRotateToken = async (req : Request, res : Response) =>    {
-
+export const handleRotateToken = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies.refreshToken
 
-        if (! refreshToken){ 
+        if (!refreshToken) {
+            clearAuthCookies(res)
             return res.status(401).json({
-                success : false,
-                message : "Refresh Token not found"
+                success: false,
+                message: "Refresh Token not found"
             })
         }
 
         let decoded
         try {
             decoded = jwt.verify(refreshToken, config.jwtRefreshSecret as string) as JwtPayload
-        } catch (err)   {
+        } catch (err) {
+            clearAuthCookies(res)
             return res.status(401).json({
-                success : false,
-                message : "Refresh Token expired or invalid"
+                success: false,
+                message: "Refresh Token expired or invalid"
             })
         }
-
 
         const session = await sessionModel.findById(decoded.sessionId)
-        
-        if (!session){
+
+        if (!session) {
+            clearAuthCookies(res)
             return res.status(401).json({
-                success : false,
-                message : "Invalid refresh token"
+                success: false,
+                message: "Invalid refresh token"
             })
         }
 
-        if (session.revoked){
+        if (session.revoked) {
+            clearAuthCookies(res)
             return res.status(401).json({
-                success : false,
-                message : "Session revoked, please login again"
+                success: false,
+                message: "Session revoked, please login again"
             })
         }
-        const incomingHash  = crypto.createHash("sha256").update(refreshToken).digest("hex")
 
-        if (incomingHash !== session.refreshTokenHash){
-            
-            await sessionModel.updateMany(
-                {user : decoded.id, revoked : false },
-                {revoked : true}
-                
-            )
-            console.warn(`Refresh token reuse detected: user ${decoded.id}, session ${decoded.sessionId}`)
-            return res.status(401).json({
-                success : false,
-                message : "Session invalid, please login again"
-            })
+        const incomingHash = crypto.createHash("sha256").update(refreshToken).digest("hex")
+
+        if (incomingHash !== session.refreshTokenHash) {
+            const GRACE_WINDOW_MS = 10 * 1000 // 10 seconds
+
+            const isWithinGrace =
+                session.previousRefreshTokenHash === incomingHash &&
+                session.rotatedAt &&
+                (Date.now() - session.rotatedAt.getTime()) < GRACE_WINDOW_MS
+
+            if (!isWithinGrace) {
+                // genuine reuse - revoke everything
+                await sessionModel.updateMany(
+                    { user: decoded.id, revoked: false },
+                    { revoked: true }
+                )
+                console.warn(`Refresh token reuse detected: user ${decoded.id}, session ${decoded.sessionId}`)
+                clearAuthCookies(res)
+                return res.status(401).json({
+                    success: false,
+                    message: "Session invalid, please login again"
+                })
+            }
+            // within grace window -> fall through, treat like a normal rotation retry
         }
-        // generate acessToken
+
+        // generate access token
         const accessToken = jwt.sign(
             { id: decoded.id, sessionId: session._id },
             config.jwtAccessSecret as string,
-            {expiresIn : "15m"}
+            { expiresIn: "15m" }
         )
-        // send in cookie
+
         res.cookie("accessToken", accessToken, {
-            httpOnly : true,
-            secure : config.nodeEnv === "production",
-            sameSite : config.nodeEnv === "production" ? "none" : "lax",
-            maxAge : 15 * 60 * 1000
+            httpOnly: true,
+            secure: config.nodeEnv === "production",
+            sameSite: config.nodeEnv === "production" ? "none" : "lax",
+            maxAge: 15 * 60 * 1000
         })
 
-        // generate new refreshToken
-
+        // generate new refresh token
         const newRefreshToken = jwt.sign(
-            {id : decoded.id, sessionId : session._id},
+            { id: decoded.id, sessionId: session._id },
             config.jwtRefreshSecret as string,
-            {expiresIn : "7d"}
+            { expiresIn: "7d" }
         )
 
-        const NewRefreshTokenHash = crypto.createHash("sha256").update(newRefreshToken).digest("hex")
+        const newRefreshTokenHash = crypto.createHash("sha256").update(newRefreshToken).digest("hex")
 
-        res.cookie("refreshToken", newRefreshToken,{
-            httpOnly : true,
-            secure : config.nodeEnv === "production",
-            sameSite : config.nodeEnv === "production" ? "none" : "lax",
-            maxAge : 7 * 24 * 60 * 60 * 1000
+        res.cookie("refreshToken", newRefreshToken, {
+            httpOnly: true,
+            secure: config.nodeEnv === "production",
+            sameSite: config.nodeEnv === "production" ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        session.refreshTokenHash = NewRefreshTokenHash
+        // rotate: keep track of previous hash + timestamp for grace window checks
+        session.previousRefreshTokenHash = session.refreshTokenHash
+        session.rotatedAt = new Date()
+        session.refreshTokenHash = newRefreshTokenHash
         await session.save()
 
         const user = await userModel.findById(decoded.id).select("-password")
         if (!user) {
+            clearAuthCookies(res)
             return res.status(400).json({
-                success : false,
-                message : "User not found"
+                success: false,
+                message: "User not found"
             })
         }
+
         return res.status(200).json({
-            success : true,
-            message : "Access token refreshed successfully",
+            success: true,
+            message: "Access token refreshed successfully",
             user: {
                 name: user.firstName,
                 email: user.email

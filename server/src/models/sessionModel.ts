@@ -1,9 +1,11 @@
-import mongoose, { Document, Schema, Types  } from "mongoose"
+import mongoose, { Document, Schema, Types } from "mongoose"
 
 
 export interface ISession extends Document {
   user: Types.ObjectId
   refreshTokenHash: string
+  previousRefreshTokenHash: string | null
+  rotatedAt: Date | null
   ip: string
   userAgent: string
   revoked: boolean
@@ -18,6 +20,14 @@ const sessionSchema = new Schema<ISession>({
     refreshTokenHash: {
         type: String,
         required: [ true, "Refresh token hash is required" ]
+    },
+    previousRefreshTokenHash: {
+        type: String,
+        default: null
+    },
+    rotatedAt: {
+        type: Date,
+        default: null
     },
     ip: {
         type: String,
